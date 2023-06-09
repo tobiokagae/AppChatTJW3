@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Chat App</title>
+  <style>
+    /* Gaya CSS */
+    /* Reset default styles */
+    html, body, ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: bisque;
+      font-family: sans-serif;
+    }
+
+    h1 {
+      font-size: 50px;
+      text-align: center;
+      margin: 20px 0;
+      color: white;
+    }
+
+    #messages {
+      font-family: sans-serif;
+      list-style-type: none;
+      margin: 0 auto;
+      padding: 20px;
+      width: 600px;
+      background-color: whitesmoke;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      border: 1px solid black; /* Menambahkan border hitam */
+    }
+
+    #message {
+      display: block;
+      width: 600px;
+      margin: 20px auto;
+      padding: 10px;
+      font-size: 16px;
+      border-color: #526D82;
+      border-radius: 10px;
+    }
+
+    button {
+      display: block;
+      width: 100px;
+      margin: 0 auto;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #526D82;
+      color: #fff;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #27374D;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+    }
+
+    li:nth-child(even) {
+      background-color: #eaeaea;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat App</h1>
+
+  <ul id="messages"></ul>
+
+  <form id="chat-form">
+    <input id="inputMessage" autocomplete="off" />
+    <button type="submit">Kirim</button>
+  </form>
+
+  <script src="https://cdn.socket.io/socket.io-3.0.4.min.js"></script>
+  <script>
+    // Membuat koneksi socket dengan server
+    const socket = io();
+
+    // Mendapatkan elemen-elemen HTML yang dibutuhkan
+    const form = document.getElementById('chat-form');
+    const inputMessage = document.getElementById('inputMessage');
+    const messages = document.getElementById('messages');
+
+    // Menampilkan pesan ke dalam elemen 'messages'
+    function addMessage(message) {
+      const li = document.createElement('li');
+      li.textContent = message;
+      messages.appendChild(li);
+    }
+
+    // Menangani pengiriman pesan
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Mencegah form dikirimkan
+
+      const message = inputMessage.value;
+      if (message) {
+        // Mengirim pesan ke server
+        socket.emit('chat message', message);
+
+        // Menambahkan pesan ke dalam elemen 'messages'
+        addMessage(message);
+
+        // Mengosongkan input pesan
+        inputMessage.value = '';
+      }
+    });
+
+    // Menerima pesan dari server
+    socket.on('chat message', (message) => {
+      // Menambahkan pesan ke dalam elemen 'messages'
+      addMessage(message);
+    });
+  </script>
+</body>
+</html>
