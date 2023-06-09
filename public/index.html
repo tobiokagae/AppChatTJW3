@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aplikasi Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // Menghubungkan socket ke server
+      const socket = io();
+
+      // Menangani pengiriman pesan
+      function sendMessage() {
+        const messageInput = document.getElementById('message');
+        const message = messageInput.value;
+        messageInput.value = '';
+
+        // Mengirim pesan ke server
+        socket.emit('chat message', message);
+      }
+
+      // Menangani pesan yang diterima
+      socket.on('chat message', (message) => {
+        const messagesList = document.getElementById('messages');
+        const newMessage = document.createElement('li');
+        newMessage.textContent = message;
+        messagesList.appendChild(newMessage);
+      });
+    </script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>ChatApp</h1>
+
+    <ul id="messages"></ul>
+
+    <input id="message" type="text" placeholder="Ketik pesan...">
+    <button onclick="sendMessage()">Kirim</button>
+  </body>
+</html>
