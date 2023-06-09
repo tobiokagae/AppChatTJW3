@@ -14,11 +14,11 @@ io.on('connection', (socket) => {
   console.log('User terhubung');
 
   // Menangani pesan yang diterima
-  socket.on('chat message', (message) => {
-    console.log('Pesan diterima:', message);
+  socket.on('chat message', (data) => {
+    console.log('Pesan diterima:', data);
 
-    // Mengirim pesan ke semua pengguna terhubung
-    io.emit('chat message', message);
+    // Mengirim objek data ke semua pengguna terhubung
+    io.emit('chat message', data);
   });
 
   // Menangani pemutusan koneksi socket
@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
 });
 
 // Menjalankan server
-const port = 3000;
+const port = 12346;
 server.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);
 });
